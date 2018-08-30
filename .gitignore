@@ -1,4 +1,8 @@
 #
 cmd-cache.sh
 
+models/
 
+log/
+
+__pycache__

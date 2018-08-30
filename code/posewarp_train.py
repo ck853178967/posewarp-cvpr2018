@@ -58,7 +58,7 @@ def train(model_name, gpu_id):
         train_loss = model.train_on_batch(x, y)
 
         util.printProgress(step, 0, train_loss)
-        write_log(callback, train_names, train_loss, step)
+        write_log(callback, train_names, [train_loss], step)
 
         if step > 0 and step % params['model_save_interval'] == 0:
             model.save(network_dir + '/' + str(step) + '.h5')

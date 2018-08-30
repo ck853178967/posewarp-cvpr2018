@@ -19,6 +19,7 @@ def make_vid_info_list(data_dir):
 
         box = info['data']['bbox'][0][0]
         x = info['data']['X'][0][0]
+        frame_names = info['data']['frame_names'][0][0]
 
         vid_info.append([info, box, x, vids[i]])
 
@@ -36,11 +37,14 @@ def get_person_scale(joints):
 
 
 def read_frame(vid_name, frame_num, box, x):
-    img_name = os.path.join(vid_name, str(frame_num + 1) + '.jpg')
-    if not os.path.isfile(img_name):
-        img_name = os.path.join(vid_name, str(frame_num + 1) + '.png')
+    # img_name = os.path.join(vid_name, str(frame_num + 1) + '.jpg')
+    # if not os.path.isfile(img_name):
+    #     img_name = os.path.join(vid_name, str(frame_num + 1) + '.png')
+    img_name = os.path.join(vid_name, frame_names[frame_num])
 
-    img = cv2.imread(img_name)
+    img_raw = cv2.imread(img_name)
+    b,g,r = cv2.split(img_raw)
+    img = cv2.merge([r,g,b])
     joints = x[:, :, frame_num] - 1.0
     box_frame = box[frame_num, :]
     scale = get_person_scale(joints)

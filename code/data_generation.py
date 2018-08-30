@@ -36,7 +36,7 @@ def get_person_scale(joints):
     return size / 200.0
 
 
-def read_frame(vid_name, frame_num, box, x):
+def read_frame(vid_name, frame_num, box, x, frame_names):
     # img_name = os.path.join(vid_name, str(frame_num + 1) + '.jpg')
     # if not os.path.isfile(img_name):
     #     img_name = os.path.join(vid_name, str(frame_num + 1) + '.png')
@@ -84,6 +84,7 @@ def warp_example_generator(vid_info_list, param, do_augment=True, return_pose_ve
             vid_bbox = vid_info_list[vid][1]
             vid_x = vid_info_list[vid][2]
             vid_path = vid_info_list[vid][3]
+            vid_frame_names = vid_info_list[vid][4]
 
             # 2. choose pair of frames
             n_frames = vid_x.shape[2]
@@ -91,8 +92,8 @@ def warp_example_generator(vid_info_list, param, do_augment=True, return_pose_ve
             while abs(frames[0] - frames[1]) / (n_frames * 1.0) <= 0.02:
                 frames = np.random.choice(n_frames, 2, replace=False)
 
-            I0, joints0, scale0, pos0 = read_frame(vid_path, frames[0], vid_bbox, vid_x)
-            I1, joints1, scale1, pos1 = read_frame(vid_path, frames[1], vid_bbox, vid_x)
+            I0, joints0, scale0, pos0 = read_frame(vid_path, frames[0], vid_bbox, vid_x, vid_frame_names)
+            I1, joints1, scale1, pos1 = read_frame(vid_path, frames[1], vid_bbox, vid_x, vid_frame_names)
 
             if scale0 > scale1:
                 scale = scale_factor / scale0

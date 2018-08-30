@@ -10,7 +10,7 @@ import truncated_vgg
 from keras.backend.tensorflow_backend import set_session
 from keras.optimizers import Adam
 
-from keras.callbacks import Tensorboard
+from keras.callbacks import TensorBoard
 
 def write_log(callback, names, logs, batch_no):
     for name, value in zip(names, logs):
@@ -48,7 +48,7 @@ def train(model_name, gpu_id):
     n_iters = params['n_training_iter']
 
     log_dir = '../log/{:s}'.format(model_name)
-    callback = Tensorboard(log_dir, write_graph=True)
+    callback = TensorBoard(log_dir, write_graph=True)
     callback.set_model(model)
     train_names = ['train_loss']
 

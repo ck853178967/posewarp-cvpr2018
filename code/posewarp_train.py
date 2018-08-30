@@ -10,6 +10,18 @@ import truncated_vgg
 from keras.backend.tensorflow_backend import set_session
 from keras.optimizers import Adam
 
+from keras.callbacks import Tensorboard
+
+def write_log(callback, names, logs, batch_no):
+    for name, value in zip(names, logs):
+        summary = tf.Summary()
+        summary_value = summary.value.add()
+        summary_value.simple_value = value
+        summary_value.tag = name
+        callback.writer.add_summary(summary, batch_no)
+        callback.writer.flush()
+
+
 
 def train(model_name, gpu_id):
     params = param.get_general_params()
@@ -35,15 +47,26 @@ def train(model_name, gpu_id):
     #model.summary()
     n_iters = params['n_training_iter']
 
+    log_dir = '../log/{:s}'.format(model_name)
+    callback = Tensorboard(log_dir, write_graph=True)
+    callback.set_model(model)
+    train_names = ['train_loss']
+
     for step in range(0, n_iters):
         x, y = next(train_feed)
 
         train_loss = model.train_on_batch(x, y)
 
         util.printProgress(step, 0, train_loss)
+        write_log(callback, train_names, train_loss, step)
 
         if step > 0 and step % params['model_save_interval'] == 0:
             model.save(network_dir + '/' + str(step) + '.h5')
+
+        # validation
+        # if step > 0 and step % valid_interval == 0:
+            # pass
+
 
 
 if __name__ == "__main__":

@@ -25,7 +25,7 @@ def get_general_params():
 
     param['n_training_iter'] = 200000
     param['test_interval'] = 500
-    param['model_save_interval'] = 1000
+    param['model_save_interval'] = 5000
     param['project_dir'] = '/data1/kuncheng/wksp/posewarp-cvpr2018'
     param['model_save_dir'] = param['project_dir'] + '/models'
     param['data_dir'] = '/data1/kuncheng/wksp/posewarp-cvpr2018/data'

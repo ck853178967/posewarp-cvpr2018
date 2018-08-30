@@ -40,7 +40,7 @@ def read_frame(vid_name, frame_num, box, x):
     # img_name = os.path.join(vid_name, str(frame_num + 1) + '.jpg')
     # if not os.path.isfile(img_name):
     #     img_name = os.path.join(vid_name, str(frame_num + 1) + '.png')
-    img_name = os.path.join(vid_name, frame_names[frame_num])
+    img_name = os.path.join(vid_name, frame_names[frame_num].split('.')[0]+'.jpg')
 
     img_raw = cv2.imread(img_name)
     b,g,r = cv2.split(img_raw)
@@ -216,13 +216,13 @@ def transfer_example_generator(examples0, examples1, param):
 
 
 def actionExampleGenerator(examples,param,return_pose_vectors=False):
-    
+
 	img_width = param['IMG_WIDTH']
 	img_height = param['IMG_HEIGHT']
 	pose_dn = param['posemap_downsample']
 	sigma_joint = param['sigma_joint']
 	n_joints = param['n_joints']
-	scale_factor = param['obj_scale_factor']	
+	scale_factor = param['obj_scale_factor']
 
 	while True:
 
@@ -230,16 +230,16 @@ def actionExampleGenerator(examples,param,return_pose_vectors=False):
 		scale = scale_factor/scale0
 		I0,joints0 = centerAndScaleImage(I0,img_width,img_height,pos0,scale,joints0)
 		posemap0 = makeJointHeatmaps(img_height,img_width,joints0,sigma_joint,pose_dn)
-		
-		src_limb_masks = makeLimbMasks(joints0,img_width,img_height)	
+
+		src_limb_masks = makeLimbMasks(joints0,img_width,img_height)
 		bg_mask = np.expand_dims(1.0 - np.amax(src_limb_masks,axis=2),2)
 		src_masks = np.log(np.concatenate((bg_mask,src_limb_masks),axis=2)+1e-10)
-	
-		for i in range(1,len(examples)):	
+
+		for i in range(1,len(examples)):
 			I1,joints1,scale1,pos1 = readExampleInfo(examples[i])
 			I1,joints1 = centerAndScaleImage(I1,img_width,img_height,pos0,scale,joints1)
 			posemap1 = makeJointHeatmaps(img_height,img_width,joints1,sigma_joint,pose_dn)
-	
+
 			X_src = np.expand_dims(I0,0)
 			X_pose_src = np.expand_dims(posemap0,0)
 			X_pose_tgt = np.expand_dims(posemap1,0)
@@ -251,7 +251,7 @@ def actionExampleGenerator(examples,param,return_pose_vectors=False):
 			X_posevec_tgt = np.expand_dims(joints1.flatten(),0)
 
 			Y[i,:,:,:] = I1
-	
+
 			if(not return_pose_vectors):
 				yield ([X_src,X_pose_src,X_pose_tgt,X_mask_src,X_trans],Y)
 			else:

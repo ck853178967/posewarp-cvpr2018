@@ -28,7 +28,7 @@ def get_general_params():
     param['model_save_interval'] = 5000
     param['project_dir'] = '/data1/kuncheng/wksp/posewarp-cvpr2018'
     param['model_save_dir'] = param['project_dir'] + '/models'
-    param['data_dir'] = '/data1/kuncheng/wksp/posewarp-cvpr2018/data'
+    param['data_dir'] = '/data1/kuncheng/Dataset/Dancing/unseen_out_2'
     param['batch_size'] = 4
     return param
 

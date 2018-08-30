@@ -21,7 +21,7 @@ def make_vid_info_list(data_dir):
         x = info['data']['X'][0][0]
         frame_names = info['data']['frame_names'][0][0]
 
-        vid_info.append([info, box, x, vids[i]])
+        vid_info.append([info, box, x, vids[i], frame_names])
 
     return vid_info
 

@@ -89,7 +89,8 @@ def warp_example_generator(vid_info_list, param, do_augment=True, return_pose_ve
             # 2. choose pair of frames
             n_frames = vid_x.shape[2]
             frames = np.random.choice(n_frames, 2, replace=False)
-            while abs(frames[0] - frames[1]) / (n_frames * 1.0) <= 0.02:
+            # while abs(frames[0] - frames[1]) / (n_frames * 1.0) <= 0.02:
+            while abs(frames[0] - frames[1]) / (n_frames * 1.0) <= 0.02 or vid_frame_names[frames[0]][0] == ' ' or vid_frame_names[frames[1]][0] == ' ':
                 frames = np.random.choice(n_frames, 2, replace=False)
 
             I0, joints0, scale0, pos0 = read_frame(vid_path, frames[0], vid_bbox, vid_x, vid_frame_names)
